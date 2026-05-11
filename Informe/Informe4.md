@@ -6,7 +6,7 @@
 ---
 
 # Informe sobre:
-## Integración de sensores y actuadores en un objeto inteligente
+## Integración de un objeto inteligente con Alexa mediante MQTT y AWS.
 
 ### Evaluación de la Materia Internet de las Cosas
 
@@ -18,61 +18,58 @@
 ---
 
 Cochabamba - Bolivia  
-Marzo 2026 
+Mayo 2026 
 
 # 1. Requerimientos Funcionales y No Funcionales
 ## Requerimientos Funcionales
 
-- El sistema debe incorporar una arquitectura distribuida compuesta por dos ESP32, uno como cliente sensor y otro como cliente actuador, comunicados a través de un servidor TCP central.
+- El sistema debe permitir la lectura de tarjetas mediante un sensor RFID-RC522.
 
-- El ESP32 sensor debe enviar las mediciones de distancia al servidor mediante comunicación TCP sobre WiFi (IEEE 802.11).
+- El sistema debe identificar y diferenciar cada tarjeta RFID registrada.
+- El sistema debe enviar el ID de la tarjeta leída hacia AWS IoT Core mediante MQTT.
+- El sistema debe actualizar el estado reportado del dispositivo en el Shadow de AWS IoT Core.
+- El sistema debe recibir comandos desde AWS IoT Core a través del Device Shadow desde Alexa y IoT core, los comandos se dividen en: 
+    #### Comandos de acción del sistema:
+   - Abrir puerta (SetModeOpen)
+   - Cerrar puerta (SetModeClose)
+   - Automatizar la puerta (SedModeAuto)
+   - Cambiar temporizador de puerta (SetAutoTimer)
+   - Registrar un RFID autorizado (SetCurrentTag)
+   - Quitar un RFID registrado (RemoveCurrentTag)
+    #### Comandos para recibir informacióm del sistema: 
+   - Obtener estado del motor (GetMotorState) 
+   - Obtener nombre del tag si esta presente (GetIfPresentTag) 
+   - Obtener el tiempo de la ultima vez que se abrió la puerta (GetLastOpenTime) 
+   - Obtener el ultimo tag registrado (GetLastTag) 
+   - Obtener el estado de la puerta (GetDoorState)
 
-- El servidor debe recibir, procesar y centralizar los datos enviados por el ESP32 sensor.
+- El sistema debe controlar el servomotor MG90S en función de los comandos anteriormente mencionados. 
+- El sistema debe permitir el movimiento del servomotor cuando una tarjeta autorizada sea detectada.
+- El sistema debe negar el acceso cuando una tarjeta no autorizada sea detectada.
+El sistema debe permitir el control del servomotor mediante comandos a través de Alexa.
+El sistema debe permitir que Alexa registre y mande las siguientes categorías:
+   - Estado de la puerta: si está abierta o cerrada
+   - Estado del motor: si está en movimiento o si está parado 
+   - Información del sensor: si percibió algo, en qué momento percibió la mascota, que mascota percibió
+   - nombre de la mascota
 
-- El servidor debe aplicar una lógica de control sobre los datos recibidos y generar comandos de salida en función de dichos datos.
-
-- El servidor debe enviar comandos al ESP32 actuador mediante comunicación TCP, siguiendo un protocolo de aplicación definido por el grupo.
-
-- El sistema debe permitir la visualización y configuración de parámetros desde una página web, la cual se comunicará con el servidor.
-
-- La página web debe permitir al usuario enviar parámetros de control al servidor, los cuales influirán en el comportamiento del sistema (por ejemplo, umbrales o modos de operación).
-
-- El sistema debe implementar un protocolo de comunicación estructurado entre cliente–servidor–actuador para el intercambio de mensajes TCP.
 
 ## Requerimientos No Funcionales
 
-- El sistema debe reaccionar a cambios en la distancia en un tiempo menor a 1 segundo.
+- El sistema debe garantizar una comunicación segura con AWS IoT Core (uso de certificados y TLS).
+- El sistema debe tener una latencia de respuesta menor a 5 segundos entre comando y acción.
+- El sistema debe ser escalable para integrar más sensores o actuadores en el futuro.
+- El sistema debe ser modular, permitiendo separar lógica de hardware, red y control.
+- El sistema debe manejar errores de conexión (reintentos automáticos a AWS).
+- El sistema debe ser compatible con redes WiFi estándar (802.11 b/g/n).
+- El sistema debe registrar logs básicos para depuración y monitoreo.
+- El sistema debe ser fácil de usar mediante comandos simples en Alexa.
 
-- El sistema debe medir la distancia con un margen de error menor al 2.5% respecto a la distancia real.
-
-- El sistema debe tener un margen de error de precision menor al 2.5%.
-
-- Se debe determinar que materiales se puede usar con el senson ultra sonido, su precision y su exactitud
-
-- Se debe determinar la distancias maximas y minimas para el funcionamiento preciso y exacto del sensor.
-
-- El sistema debe dejar que el usuario defina la cantidad de veces que parpadea por segundo, y esto debe tener un error menor al 10%
-
-- El código debe estar dividido en funciones o módulos que permitan modificar o ampliar el sistema fácilmente.
-
-- El sistema debe permitir modificaciones futuras como agregar nuevos actuadores o sensores.
-
-- Los módulos ESP32 deben conectarse al servidor y operar de manera simultánea sin presentar errores en la comunicación.
-
-- El sistema debe ser capaz de gestionar adecuadamente las desconexiones de los módulos ESP32, permitiendo su reconexión sin afectar el funcionamiento general.
-
-- Los dispositivos ESP32 deben operar únicamente cuando se encuentren conectados a una red WiFi y al servidor correspondiente.
-
-- El sistema debe garantizar una comunicación estable entre los componentes, minimizando la pérdida de datos durante la transmisión.
-
-- El sistema debe mantener tiempos de respuesta adecuados en la comunicación entre cliente, servidor y actuador, asegurando una operación en tiempo casi real.
-
-- El sistema debe ser tolerante a fallos en la red, permitiendo la recuperación automática de la conexión en caso de interrupciones temporales.
 
 # 2. Diseño del Sistema
 
 ## 2.1 Diagrama de circuito
-![Diagrama](Imagenes/diagrama_circuito.png)
+![Diagrama](Imagenes/diagrama_circuito.jpeg)
 ## 2.2 Diagrama de arquitectura del sistema
 ![Diagrama](Imagenes/Diagrama_de_arquitectura.png)
 ## 2.3 Diagramas estructurales y de comportamiento
@@ -80,21 +77,12 @@ Marzo 2026
 ![Diagrama](Imagenes/diagrama_secuencia.jpeg)
 ### 2.3.2 Diagramas uml de clases
 ![Diagrama](Imagenes/diagrama_uml.jpeg)
-## 2.4 Tabla de Protocolos
-### Lista de comandos y sus descripciones
-| Transmisor        | Receptor                  | Nombre              | Descripción                                                                 | Ejemplos                                      |
-|------------------|---------------------------|---------------------|-----------------------------------------------------------------------------|-----------------------------------------------|
-| U_sensor         | Servidor                  | Registrar (sensor)  | registra que el sensor se conectó al servidor                              | REGISTER: SENSOR                              |
-| U_actuador       | Servidor                  | Registrar (actuator)| registra que el actuador se conectó al servidor                             | REGISTER: ACTUATOR                            |
-| Servidor         | U_sensor, U_actuador      | Ok()                | Cuando el servidor recibe un registro o un ping devuelve un mensaje de Ok   | REGISTER:OK<br>PING:OK                        |
-| U_sensor         | Servidor                  | EnviarDistancia (dist) | Detecta cuando hay un cambio significativo en la distancia o cada cierto tiempo y lo manda al servidor | DISTANCE:40.5                                 |
-| Servidor         | U_actuador                | SetLeds(config)     | El servidor manda que leds deberían prenderse, apagarse y parpadear         | LED_CONFIG: 1,0,2,1<br>(prende led 1 y 4 apaga led 2 y parpadea led 3) |
-| U_actuador, U_sensor | Servidor             | Ping()              | los esp32 mandan una señal de ping para asegurarse de que estén conectados al servidor | PING:SENSOR, PING:ACTUATOR                   |
+
 # 3. Implementación
 
 ## 3.1 Código fuente documentado
 
-[Enlace a GitHub] https://github.com/Andrezubi/2doEntregable_IOT/tree/AndresZubieta
+[Enlace a GitHub] https://github.com/Andrezubi/IoT-4to-Entregable
 
 # 4. Pruebas y Validaciones
 ## Prueba de exactitud de distancia
@@ -228,3 +216,9 @@ Asimismo, el sistema mantiene una operación continua mientras ambos ESP32 esté
 <img src="Imagenes/Prueba_Anexo4.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo5.jpeg" width="450">
 <img src="Imagenes/Prueba_Anexo6.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo7.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo8.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo9.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo10.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo11.jpeg" width="250">
+<img src="Imagenes/Prueba_Anexo12.jpeg" width="250">
