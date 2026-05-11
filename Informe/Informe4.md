@@ -74,10 +74,7 @@ El sistema debe permitir que Alexa registre y mande las siguientes categorías:
 ![Diagrama](Imagenes/Diagrama_de_arquitectura.png)
 ## 2.3 Diagramas estructurales y de comportamiento
 ### 2.3.1 Diagrama de secuencia
-![Diagrama](Imagenes/diagrama_secuencia.jpeg)
-### 2.3.2 Diagramas uml de clases
-![Diagrama](Imagenes/diagrama_uml.jpeg)
-
+![Diagrama](Imagenes/Diagrama_de_secuencia.png)
 # 3. Implementación
 
 ## 3.1 Código fuente documentado
