@@ -162,15 +162,27 @@ const char* getMotorStateStr() {
 }
 
 void commandOpen() {
+
   if (doorIsOpen()) {
     Serial.println("[DOOR] Already open, ignoring.");
     return;
   }
+
   Serial.println("[DOOR] → OPEN");
+
   servo.moveTo(DOOR_ANGLE_OPEN);
-  openedAt       = millis();
-  autoCloseArmed = (openDurationSec > 0);
-  needsReport    = true;
+
+  openedAt = millis();
+
+  // SOLO activar auto close en modo auto
+  if (currentMode == "auto") {
+    autoCloseArmed = (openDurationSec > 0);
+  }
+  else {
+    autoCloseArmed = false;
+  }
+
+  needsReport = true;
 }
 
 void commandClose() {
@@ -187,6 +199,9 @@ void commandClose() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
+
+
+
 
 String getISOTimestamp() {
   struct tm timeinfo;
@@ -266,21 +281,45 @@ void applyDelta(JsonObject delta) {
   bool changed = false;
 
   if (delta.containsKey("mode")) {
+
     String newMode = delta["mode"].as<String>();
-    if(newMode!=currentMode){
+
+    if(newMode != currentMode){
+
       Serial.print("[DELTA] mode: ");
-    Serial.print(currentMode);
-    Serial.print(" → ");
-    Serial.println(newMode);
-    currentMode = newMode;
-    changed = true;
+      Serial.print(currentMode);
+      Serial.print(" → ");
+      Serial.println(newMode);
+
+      currentMode = newMode;
+      changed = true;
     }
 
+    if (currentMode == "open") {
 
-    if      (currentMode == "open")   commandOpen();
-    else if (currentMode == "closed") commandClose();
-    // "auto" → handled by RFID in loop()
-  }
+      autoCloseArmed = false;
+      commandOpen();
+
+    }
+    else if (currentMode == "closed") {
+
+      autoCloseArmed = false;
+      commandClose();
+
+    }
+    else if (currentMode == "auto") {
+
+      // si la puerta ya está abierta,
+      // empezar timer automático
+      if (doorIsOpen()) {
+
+        openedAt = millis();
+        autoCloseArmed = (openDurationSec > 0);
+
+        Serial.println("[AUTO] Auto-close rearmed.");
+      }
+    }
+}
 
   if (delta.containsKey("open_duration")) {
     unsigned int newDuration= delta["open_duration"].as<unsigned int>();
@@ -487,7 +526,9 @@ void loop() {
 
   // ── Pending report ─────────────────────────────────────────────────────────
   if (needsReport && mqttClient.connected()) {
-    publishReport(rfid.getCurrentUID());
+    String petName = findPetByTag(rfid.getCurrentUID());
+    publishReport(rfid.getCurrentUID(),petName);
+
   }
 }
 
