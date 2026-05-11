@@ -207,14 +207,14 @@ Asimismo, el sistema mantiene una operación continua mientras ambos ESP32 esté
 
 # 8. Anexos 
 
-[Enlace a la planilla de pruebas](https://docs.google.com/spreadsheets/d/1DyKpLJWUTkjiDA7z87IJXlJ0ULdZPX75TzI_sI9DBeM/edit?gid=0#gid=0) 
+[Enlace a la planilla de pruebas](https://docs.google.com/spreadsheets/d/1vf-1s-AhRqPHOushzfqOPbe9ObheVhk6w0d8jkjzZqQ/edit?gid=0#gid=0) 
 
 ### Imagenes de las pruebas
 <img src="Imagenes/Prueba_Anexo1.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo2.jpeg" width="250">
-<img src="Imagenes/Prueba_Anexo3.jpeg" width="450">
+<img src="Imagenes/Prueba_Anexo3.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo4.jpeg" width="250">
-<img src="Imagenes/Prueba_Anexo5.jpeg" width="450">
+<img src="Imagenes/Prueba_Anexo5.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo6.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo7.jpeg" width="250">
 <img src="Imagenes/Prueba_Anexo8.jpeg" width="250">
