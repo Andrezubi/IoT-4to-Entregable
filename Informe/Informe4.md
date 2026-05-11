@@ -85,125 +85,273 @@ El sistema debe permitir que Alexa registre y mande las siguientes categorías:
 [Enlace a GitHub] https://github.com/Andrezubi/IoT-4to-Entregable
 
 # 4. Pruebas y Validaciones
-## Prueba de exactitud de distancia
 
-Para evaluar la exactitud del sistema se realizaron 20 mediciones a tres distancias de referencia: 80 cm, 50 cm y 20 cm utilizando el sensor ultrasónico. Con los datos obtenidos se calcularon el promedio, la desviación estándar y el porcentaje de error de precision y exactitud, con el objetivo de comparar las mediciones del sistema con las distancias reales.
+## 4.1 Prueba de exactitud de distancia
 
-Los datos utilizados en esta prueba se encuentran en la hoja:
+Para evaluar la exactitud del sensor RFID-RC522 se realizaron 16 mediciones de distancia máxima de detección, acercando lentamente la tarjeta RFID hasta identificar el punto límite en el que el sensor lograba reconocerla correctamente.
 
-[Exactitud de distancia](https://docs.google.com/spreadsheets/d/1DyKpLJWUTkjiDA7z87IJXlJ0ULdZPX75TzI_sI9DBeM/edit?gid=0#gid=0)
+Los resultados obtenidos muestran que el sensor mantiene una distancia de detección estable y consistente, con valores que oscilan principalmente entre 3.2 cm y 3.7 cm. Se registró un único valor atípico de 6.5 cm, el cual se considera una medición aislada probablemente ocasionada por variaciones en la orientación de la tarjeta o interferencias externas.
 
-## Prueba de materiales para distancia
+A partir de los datos registrados se obtuvo:
 
-Para analizar el comportamiento del sensor ultrasónico frente a distintos materiales, se realizaron 10 mediciones a una distancia de referencia de 30 cm utilizando superficies como madera, plástico, vidrio, mano, plastoformo, metal y cerámica, además de una medición de control sin objeto. El objetivo fue observar cómo el tipo de material influye en la medición de distancia del sensor.
+- Distancia promedio de detección: **3.68 cm**
+- Distancia mínima registrada: **3.2 cm**
+- Distancia máxima registrada: **6.5 cm**
+- Rango frecuente de funcionamiento: **3.3 cm a 3.7 cm**
 
-Con los datos obtenidos se calcularon el promedio, la desviación estándar y los errores de exactitud y precisión para cada material. 
 
-Los datos utilizados en esta prueba se encuentran en la hoja:
 
-[prueba de materiales para distancia](https://docs.google.com/spreadsheets/d/1DyKpLJWUTkjiDA7z87IJXlJ0ULdZPX75TzI_sI9DBeM/edit?gid=282925511#gid=282925511)
+## 4.2 Prueba de interferencia según distintos materiales
 
-## Prueba de distancias mínimas y máximas del sensor
+Para analizar el comportamiento del sensor RFID-RC522 frente a distintos materiales, se realizaron pruebas colocando diferentes superficies entre la tarjeta RFID y el sensor, manteniendo una distancia aproximada de entre 1 cm y 3 cm.
 
-Para evaluar el rango de funcionamiento del sensor ultrasónico se realizaron mediciones en distancias cercanas al límite máximo y mínimo de detección. En el caso de las distancias máximas se tomaron mediciones entre 270 cm y 310 cm, mientras que para las distancias mínimas se realizaron pruebas entre 10 cm y 0 cm, registrando varias mediciones para cada punto.
+Los materiales utilizados fueron:
 
-Los datos utilizados en esta prueba se encuentran en la hoja:
+- Cartón de 1.2 cm de grosor.
+- Plastoformo de 1.4 cm de grosor.
+- Vidrio de 0.5 cm de grosor.
+- Madera de 1.5 cm de grosor.
+- Tela de 3.4 cm de grosor.
+- Plástico de 3.3 cm de grosor.
+- Aluminio de 0.5 cm de grosor.
 
-[prueba de distancias minimas y maximas sensor](https://docs.google.com/spreadsheets/d/1DyKpLJWUTkjiDA7z87IJXlJ0ULdZPX75TzI_sI9DBeM/edit?gid=2038861534#gid=2038861534)
- 
-## Prueba parpadeo por segundo
+Durante las pruebas se realizaron 10 mediciones por material para determinar si el sensor lograba detectar correctamente la tarjeta y si existía reducción en la distancia útil de lectura.
 
-Se realizaron pruebas para verificar la frecuencia de parpadeo de un LED configurado a diferentes valores entre 1 y 5 parpadeos por segundo (b/s). Para cada configuración se contó manualmente el número de parpadeos durante 10 segundos. El procedimiento se repitió 6 veces por cada frecuencia con el fin de obtener resultados más confiables y calcular un promedio de los valores registrados.
+Resultados obtenidos:
 
-[Prueba parpadeo por segundo](https://docs.google.com/spreadsheets/d/1DyKpLJWUTkjiDA7z87IJXlJ0ULdZPX75TzI_sI9DBeM/edit?gid=241907707#gid=241907707)
+- **Cartón:** detección exitosa en el 100% de las pruebas, sin reducción apreciable de distancia.
+- **Plastoformo:** detección exitosa en el 100% de las pruebas, aunque se observó una disminución moderada de la distancia útil.
+- **Vidrio:** detección exitosa en el 100% de las pruebas, pero con interferencia considerable en la estabilidad de lectura.
+- **Madera:** detección exitosa en el 100% de las pruebas, con ligera reducción de distancia.
+- **Tela:** detección exitosa en el 100% de las pruebas, sin efectos relevantes.
+- **Plástico:** detección exitosa en el 100% de las pruebas, sin efectos significativos.
+- **Aluminio:** el sensor no logró detectar la tarjeta en ninguna prueba, presentando además fallos temporales de lectura posteriores a la interferencia.
+
+Los resultados muestran que los materiales no metálicos afectan mínimamente el funcionamiento del sensor, mientras que el aluminio genera una interferencia total debido a las propiedades electromagnéticas del material.
+
+
+
+## 4.3 Prueba de tiempo de respuesta del sensor
+
+Para evaluar el tiempo de respuesta del sensor RFID-RC522 se realizaron mediciones relacionadas con:
+
+- Tiempo de reconocimiento de la tarjeta.
+- Tiempo que tarda el sensor en dejar de detectar la tarjeta luego de alejarla.
+
+Durante las pruebas se observó que el tiempo de lectura fue prácticamente instantáneo, por lo que no pudo medirse manualmente con precisión utilizando cronómetro.
+
+En cambio, sí se logró medir el tiempo de “olvido” del sensor, obteniéndose los siguientes resultados:
+
+- Tiempo promedio de olvido: **1.57 segundos**
+- Tiempo mínimo registrado: **1.33 segundos**
+- Tiempo máximo registrado: **1.86 segundos**
+- Desviación estándar: **0.14 segundos**
+
+Estos resultados muestran que el sensor posee una detección rápida y estable, manteniendo temporalmente el último estado detectado antes de reiniciarse.
+
+
+## 4.4 Prueba de lectura continua
+
+Se realizó una prueba de funcionamiento continuo dejando una tarjeta RFID sobre el sensor durante periodos prolongados de tiempo para verificar si existían pérdidas de conexión o fallos de lectura.
+
+Las pruebas se realizaron desde 1 minuto hasta 10 minutos continuos.
+
+Resultados obtenidos:
+
+- El sensor mantuvo la detección activa durante todo el tiempo de prueba.
+- No se presentaron pérdidas de conectividad.
+- No se detectaron reinicios ni desconexiones del sistema.
+- La estabilidad fue del 100% durante los 10 minutos evaluados.
+
+
+## 4.5 Prueba de interferencia entre tarjetas
+
+Se realizó una prueba utilizando dos tarjetas RFID simultáneamente con el objetivo de determinar el comportamiento del sensor al detectar múltiples identificadores cercanos.
+
+Resultados obtenidos:
+
+- El sensor logró detectar ambas tarjetas.
+- El sistema alternaba continuamente entre los IDs detectados.
+- El cambio de identificación ocurría de forma rápida y constante mientras ambas tarjetas permanecían cerca del sensor.
+- Cuando las tarjetas fueron colocadas perpendicularmente al sensor, ninguna pudo ser detectada.
+
+Esto demuestra que el sensor RFID-RC522 no está diseñado para manejar múltiples tarjetas simultáneamente en espacios reducidos, ya que se producen conflictos de lectura.
+
+
+## 4.6 Pruebas de tiempo de reacción del servomotor
+
+Se realizaron pruebas para medir el tiempo requerido por el servomotor MG90S para realizar movimientos de 90°.
+
+Se ejecutaron 10 mediciones consecutivas obteniendo los siguientes resultados:
+
+- Tiempo promedio de giro de 90°: **1754.6 ms**
+- Tiempo mínimo registrado: **1746 ms**
+- Tiempo máximo registrado: **1759 ms**
+
+Los resultados muestran que el servomotor presenta un comportamiento estable y consistente en todos los movimientos realizados.
+
+
+## 4.7 Prueba de precisión del servomotor
+
+Para evaluar la precisión del servomotor se realizaron mediciones físicas de posición en ángulos de 0° y 180°.
+
+Resultados obtenidos:
+
+### Medición en 0°
+
+- Promedio: **1.02**
+- Desviación estándar: **0.079**
+
+### Medición en 180°
+
+- Promedio: **1.18**
+- Desviación estándar: **0.063**
+
+Los resultados muestran una baja variación entre mediciones, indicando que el servomotor mantiene una posición estable y repetible.
+
+
+## 4.8 Prueba de funcionamiento continuo del servomotor
+
+Se realizó una prueba de funcionamiento continuo del servomotor durante periodos prolongados para evaluar posibles problemas de calentamiento o pérdida de velocidad.
+
+Resultados obtenidos:
+
+- El servomotor funcionó correctamente durante los 9 minutos de prueba.
+- No se detectó calentamiento significativo.
+- No se observó disminución de velocidad.
+- El sistema mantuvo estabilidad mecánica durante toda la prueba.
+
+
+## 4.9 Prueba de obstrucciones del servomotor
+
+Se realizaron pruebas colocando distintos objetos como obstrucción física al movimiento del servomotor.
+
+Materiales utilizados:
+
+- Dedos
+- Madera
+- Plastoformo
+- Vidrio
+- Metal
+- Cartón
+
+Resultados obtenidos:
+
+- El servomotor logró recuperar rápidamente su posición después de la mayoría de interferencias.
+- Las obstrucciones más rígidas, como metal y vidrio, lograron detener temporalmente el movimiento.
+- Materiales ligeros como cartón y plastoformo no impidieron el funcionamiento normal del motor.
+
+Esto demuestra que el sistema posee una capacidad aceptable de recuperación ante pequeñas obstrucciones mecánicas.
+
 
 # 5. Resultados
 
 ## 5.1 Resultados de integración del sistema distribuido
 
-El sistema implementado, compuesto por dos módulos ESP32 (sensor y actuador), un servidor TCP central y una interfaz web, logró establecer comunicación efectiva mediante WiFi (IEEE 802.11).
+El sistema implementado logró integrar correctamente los módulos ESP32, el sensor RFID-RC522, el servomotor MG90S, AWS IoT Core, MQTT y Alexa mediante comunicación WiFi.
 
-El ESP32 sensor realizó la adquisición continua de datos provenientes del sensor ultrasónico y los transmitió correctamente al servidor. A su vez, el servidor procesó la información recibida, aplicó la lógica de control definida por los rangos de distancia y generó comandos que fueron enviados al ESP32 actuador.
+Se verificó el correcto funcionamiento de:
 
-El ESP32 actuador respondió adecuadamente ejecutando las acciones correspondientes sobre los LEDs (encendido y parpadeo según el rango de distancia). Esto demuestra que la arquitectura cliente–servidor–actuador funciona de manera coherente y sincronizada.
+- Lectura de tarjetas RFID.
+- Envío de información mediante MQTT hacia AWS IoT Core.
+- Actualización del Device Shadow.
+- Recepción de comandos desde Alexa.
+- Control remoto y automático del servomotor.
 
-## 5.2 Resultados de clasificación por rangos
+El sistema respondió correctamente a los comandos de apertura, cierre y automatización de la "puerta", demostrando una integración funcional entre hardware, nube y asistentes virtuales.
 
-El sistema logró clasificar correctamente las distancias en los rangos definidos:
 
-- Menor a 20 cm → LED verde constante  
-- Entre 20 cm y 50 cm → LED amarillo en parpadeo lento  
-- Entre 50 cm y 80 cm → LED rojo en parpadeo  
-- Mayor a 80 cm → LED azul en parpadeo  
-- Sin detección → LEDs apagados  
+## 5.2 Resultados de exactitud de distancia
 
-Se verificó que el servidor interpreta correctamente los datos recibidos y envía comandos adecuados al actuador, cumpliendo con la lógica de control definida.
+Los resultados muestran que el sensor RFID-RC522 posee una distancia de lectura efectiva promedio de aproximadamente **3.68 cm**, manteniendo un comportamiento estable en la mayoría de pruebas realizadas.
 
-## 5.3 Resultados de comunicación TCP y web
+La mayoría de mediciones se concentraron entre **3.3 cm y 3.7 cm**, lo que evidencia un funcionamiento consistente y preciso para aplicaciones de acceso cercano.
 
-La comunicación TCP entre los componentes del sistema se mantuvo estable durante las pruebas. No se evidenciaron pérdidas significativas de datos en condiciones normales de operación.
+Esto cumple correctamente con el requerimiento funcional relacionado con la lectura de tarjetas RFID.
 
-La página web permitió visualizar y modificar parámetros del sistema, los cuales fueron recibidos por el servidor y reflejados en el comportamiento del sistema, validando la correcta integración de la interfaz de usuario con la lógica del servidor.
 
-## 5.4 Resultados de tolerancia a fallos y reconexión
+## 5.3 Resultados de interferencia según materiales
 
-Durante las pruebas de desconexión de los módulos ESP32, el sistema mostró capacidad de recuperación mediante reconexión a la red WiFi y al servidor.
+Las pruebas realizadas demostraron que los materiales no metálicos afectan mínimamente el funcionamiento del sensor RFID.
 
-El servidor fue capaz de manejar la desconexión del cliente sensor o actuador sin afectar el funcionamiento general del sistema, evidenciando tolerancia a fallos en la red y continuidad operativa.
+Materiales como cartón, tela y plástico mantuvieron una tasa de detección del 100%, mientras que el aluminio bloqueó completamente la comunicación RFID debido a sus propiedades conductoras.
 
-## 5.5 Resultados de pruebas de exactitud de distancia
+Esto permitió identificar las limitaciones físicas del sistema y definir recomendaciones para futuras instalaciones.
 
-Los resultados obtenidos previamente muestran que el sistema mantiene un alto nivel de precisión en la medición de distancia:
 
-- 80 cm → 79.63 cm (error: 0.46%)  
-- 50 cm → 49.52 cm (error: 0.96%)  
-- 20 cm → 20.04 cm (error: 0.21%)  
+## 5.4 Resultados de tiempo de respuesta del sensor
 
-Esto cumple con el requerimiento no funcional de mantener un error menor al 2.5%, validando el correcto procesamiento de la señal del sensor ultrasónico en el ESP32 sensor.
+El sensor RFID-RC522 presentó tiempos de lectura prácticamente instantáneos cuando la tarjeta se encontraba dentro del rango operativo.
 
-## 5.6 Resultados de rendimiento del sistema
+El tiempo promedio para dejar de detectar una tarjeta fue de aproximadamente **1.57 segundos**, mostrando una respuesta estable y repetible.
 
-El sistema mostró tiempos de respuesta menores a 1 segundo desde la medición hasta la activación del actuador, cumpliendo con el requisito de operación en tiempo casi real.
+La baja desviación estándar obtenida evidencia consistencia en el comportamiento del sensor.
 
-Asimismo, el sistema mantiene una operación continua mientras ambos ESP32 estén conectados al servidor y a la red WiFi, cumpliendo con los requerimientos de disponibilidad y conectividad.
+## 5.5 Resultados de lectura continua
+
+Durante las pruebas de lectura continua el sistema mantuvo estabilidad total durante periodos de hasta 10 minutos sin presentar pérdidas de detección ni desconexiones.
+
+Esto demuestra que el sistema puede operar de manera continua y confiable durante largos periodos de funcionamiento.
+
+## 5.6 Resultados de interferencia entre tarjetas
+
+Las pruebas demostraron que el sensor puede detectar múltiples tarjetas cercanas, aunque no de forma simultánea estable.
+
+Cuando dos tarjetas se encontraban próximas al sensor, el sistema alternaba constantemente entre ambos identificadores, generando inestabilidad en la lectura.
+
+Además, la orientación de las tarjetas influye significativamente en la detección.
+
+## 5.7 Resultados de tiempo de reacción del servomotor
+
+El servomotor MG90S presentó tiempos de reacción consistentes, con un promedio de **1754.6 ms** para movimientos de 90°.
+
+La baja variación entre pruebas demuestra estabilidad mecánica y precisión en los movimientos ejecutados.
+
+## 5.8 Resultados de precisión del servomotor
+
+Las pruebas de precisión evidenciaron una variación mínima entre posiciones repetidas, obteniendo desviaciones estándar menores a 0.08 en todas las mediciones realizadas.
+
+Esto demuestra que el servomotor mantiene posiciones estables y repetibles, adecuadas para el sistema de apertura de puerta implementado.
+
+## 5.9 Resultados de funcionamiento continuo del servomotor
+
+El servomotor funcionó correctamente durante periodos prolongados sin presentar sobrecalentamiento ni pérdida de velocidad.
+
+El sistema mantuvo estabilidad mecánica y eléctrica durante toda la prueba continua realizada.
+
+## 5.10 Resultados de pruebas de obstrucción del servomotor
+
+El servomotor logró recuperarse correctamente ante la mayoría de obstrucciones mecánicas evaluadas.
+
+Los materiales más rígidos consiguieron detener temporalmente el motor, mientras que materiales ligeros no afectaron significativamente el movimiento.
+
+Esto demuestra una adecuada capacidad de recuperación del sistema ante pequeñas interferencias físicas.
 
 # 6. Conclusiones
 
-- El sistema distribuido basado en dos ESP32, un servidor TCP y una interfaz web fue implementado exitosamente, permitiendo la correcta adquisición, procesamiento y actuación sobre datos de distancia en tiempo real.
+1. El sistema logró integrar exitosamente el sensor RFID-RC522, el servomotor MG90S, AWS IoT Core, MQTT y Alexa, permitiendo controlar la apertura y cierre de la puerta tanto de manera automática como mediante comandos de voz. Esto demuestra el correcto funcionamiento de la arquitectura IoT implementada.
 
-- La arquitectura cliente–servidor–actuador permitió desacoplar funciones, facilitando la escalabilidad del sistema y cumpliendo con principios de modularidad y distribución.
+2. Las pruebas de exactitud mostraron que el sensor RFID-RC522 posee una distancia efectiva promedio de lectura de **3.68 cm**, manteniendo la mayoría de mediciones entre **3.3 cm y 3.7 cm**, lo que evidencia un comportamiento estable y adecuado para aplicaciones de control de acceso de corto alcance.
 
-- El ESP32 sensor logró medir distancias con un alto grado de precisión, manteniendo errores menores al 2.5%, lo cual valida el uso del sensor ultrasónico dentro del rango operativo definido.
+3. El sensor presentó tiempos de respuesta muy rápidos, ya que la detección de tarjetas fue prácticamente inmediata dentro del rango operativo. Además, el tiempo promedio de “olvido” registrado fue de **1.57 segundos**, con una desviación estándar de apenas **0.14 segundos**, indicando consistencia en el funcionamiento.
 
-- El ESP32 actuador respondió correctamente a los comandos enviados por el servidor, ejecutando los patrones de encendido y parpadeo de LEDs según los rangos de distancia establecidos.
+4. Las pruebas de interferencia demostraron que materiales no metálicos como cartón, tela y plástico permiten una detección correcta en el **100% de las pruebas realizadas**, mientras que el aluminio bloqueó completamente la comunicación RFID, evidenciando la sensibilidad del sistema frente a materiales conductores.
 
-- El servidor TCP cumplió un rol central en la lógica del sistema, centralizando la comunicación, procesando datos y aplicando reglas de control de manera efectiva.
+5. El servomotor MG90S mostró un comportamiento estable y preciso, obteniendo un tiempo promedio de **1754.6 ms** para movimientos de 90°, además de mantener funcionamiento continuo durante varios minutos sin sobrecalentamiento ni pérdida de velocidad, confirmando su confiabilidad para aplicaciones automatizadas.
 
-- La página web permitió la interacción del usuario con el sistema, habilitando la configuración de parámetros que influyen directamente en el comportamiento del sistema, cumpliendo su función como interfaz de control.
-
-- El sistema demostró capacidad de tolerancia a fallos, permitiendo la reconexión de los módulos ESP32 sin afectar la estabilidad general.
-
-- En general, los requerimientos funcionales y no funcionales definidos fueron cumplidos satisfactoriamente, destacando la estabilidad de la comunicación, la precisión de las mediciones y la correcta integración de todos los componentes.
+---
 
 # 7. Recomendaciones
 
-- Se recomienda mejorar la gestión de la comunicación TCP implementando mecanismos de reconexión automática más robustos y detección de pérdida de conexión en tiempo real.
+1. Evitar el uso de materiales metálicos, especialmente aluminio, cerca del sensor RFID-RC522, ya que durante las pruebas este material provocó una tasa de detección del **0%** y generó interferencias temporales en el funcionamiento del sistema.
 
-- Se sugiere optimizar el código de los ESP32 evitando bloqueos en la ejecución (por ejemplo, reemplazando funciones con retardos por temporizadores no bloqueantes) para mejorar la eficiencia del sistema.
+2. Implementar mecanismos de filtrado o validación de lectura para evitar conflictos cuando múltiples tarjetas RFID se encuentren cerca del sensor, debido a que el sistema alterna rápidamente entre identificadores y genera lecturas inestables.
 
-- Para mejorar la escalabilidad, se recomienda diseñar el servidor de forma que pueda soportar múltiples clientes sensores y actuadores adicionales en el futuro.
+3. Incorporar una fuente de alimentación externa y regulada para el servomotor MG90S en futuras versiones del proyecto, con el objetivo de garantizar mayor estabilidad eléctrica y reducir posibles caídas de tensión durante movimientos continuos.
 
-- Se recomienda implementar protocolos de comunicación más estructurados (por ejemplo, con formatos tipo JSON) para facilitar la interpretación de mensajes entre cliente, servidor y actuador.
+4. Añadir sensores complementarios, como sensores ultrasónicos o infrarrojos, para mejorar la automatización del sistema y aumentar la seguridad en la detección de presencia o movimiento cerca de la puerta.
 
-- Para mejorar la precisión en frecuencias de parpadeo, se recomienda el uso de temporizadores hardware en lugar de conteos manuales o delays, reduciendo el margen de error en frecuencias altas.
-
-- Se sugiere automatizar las pruebas de validación (por ejemplo, conteo de parpadeos) para evitar errores humanos en la medición de resultados.
-
-- Se recomienda mantener el sensor ultrasónico dentro de su rango óptimo de operación (aproximadamente 3 cm a 290 cm) y evitar superficies que absorban sonido, para asegurar mediciones más estables.
-
-- Se sugiere fortalecer la interfaz web agregando validaciones de entrada y visualización en tiempo real del estado del sistema (conexión, datos del sensor, estado del actuador).
-
-- Se recomienda considerar mecanismos de seguridad básicos en la comunicación TCP (validación de mensajes, control de acceso), especialmente si el sistema se despliega en redes no controladas.
+5. Realizar pruebas de funcionamiento continuo durante periodos más prolongados y bajo distintas condiciones ambientales, con el fin de evaluar el comportamiento del sistema frente a variaciones de temperatura, humedad y uso intensivo a largo plazo.
 
 # 8. Anexos 
 
